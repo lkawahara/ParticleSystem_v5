@@ -1,7 +1,7 @@
 // sdurant12
 // 11/14/2012
 
-package particlesystem_v5;
+package models;
 
 public class Block {
     
