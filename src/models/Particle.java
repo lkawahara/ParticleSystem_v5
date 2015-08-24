@@ -73,8 +73,6 @@ public class Particle {
 			age += 100 / (Math.abs(xVel) + Math.abs(yVel));
 		}
 		
-		//p.resetParticle(xPos, yPos, xVel, yVel);
-		//p.setAge(age);
 		return this;
 	}
 	

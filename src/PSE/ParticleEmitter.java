@@ -1,43 +1,54 @@
 package PSE;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import models.Graviton;
 import models.Particle;
 
 //simulate a frequency band with a particle emitter
 public class ParticleEmitter {
 	
-	private static int NUM_EMIT_PARTICLES = 16;
+	private static int NUM_EMIT_PARTICLES = 2;
+	private static int AGE_THRESHOLD = 100;
+	
 	private static Random rand = new Random();
 	
 	private float posX, posY;
-	private boolean emit = false;
-	ArrayList<Particle> particleAL = new ArrayList<Particle>();
-	private int[] particleRaster;
+	private boolean emit = true;
+	private ArrayList<Particle> particleAL = new ArrayList<Particle>();
+	private Graviton force;
 
-	public ParticleEmitter(float posX, float posY, BufferedImage particleImage) {
+	public ParticleEmitter(float posX, float posY) {
 		this.posX = posX;
 		this.posY = posY;
-		particleRaster = ((DataBufferInt) particleImage.getRaster()
-				.getDataBuffer()).getData();
+		this.force = new Graviton(posX, posY - 200, 0, 10);
 	}
 
 	// to be called every frame
 	public void update() {
-		resetParticleRaster();
+		//add more particles
+		tryEmitParticlesAtLocation(NUM_EMIT_PARTICLES, posX, posY);
+		//update graviton's yPos based on frequency
+		updateGraviton();
+		//affect particles with graviton
+		updateParticles();
+		//clear old
+		killOldParticles();
 	}
-	
-	private void resetParticleRaster() {
-		for (int I = 0; I < particleRaster.length; I++) {
-			particleRaster[I] = 0;
+	private void updateGraviton(){
+		this.force.setyPos(this.force.getyPos() - 1);
+	}
+	private void updateParticles(){
+		for(Particle p : particleAL){
+			p.update(force);
 		}
 	}
+	
 	// if emit on, emit
-	private void tryEmitParticlesAtLocation(int numberSquare, int positionX,
-			int positionY) {
+	private void tryEmitParticlesAtLocation(int numberSquare, float positionX,
+			float positionY) {
 		if (emit) {
 			for (int x = 0; x <= numberSquare; x++) {
 				for (int y = 0; y <= numberSquare; y++) {
@@ -50,6 +61,26 @@ public class ParticleEmitter {
 		}
 	}
 
+	private void killOldParticles(){
+		for(Particle p : particleAL){
+			if(p.getAge() > AGE_THRESHOLD){
+				particleAL.remove(p);
+			}
+		}
+	}
+	
+	public int getNumParticles() {
+		return particleAL.size();
+	}
+
+	public Graviton getGraviton() {
+		return force;
+	}
+
+	public List<Particle> getParticles() {
+		return new ArrayList(particleAL);
+	}
+	
 //	private void addParticleIfInOpenSpace(Particle p, float xPos, float yPos) {
 //		if (blockArray[(int) ((xPos) / 32)][(int) ((yPos) / 32)].type == 0) { 
 //			if (xPos <= WIDTH - 4 && xPos >= 4 && yPos <= HEIGHT - 4
