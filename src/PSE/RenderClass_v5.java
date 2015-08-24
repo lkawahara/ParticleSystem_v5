@@ -309,7 +309,7 @@ public class RenderClass_v5 extends JPanel{
 		g.drawImage(particleImage, 0, 0, 2 * WIDTH, 2 * HEIGHT, null);
 		g.setColor(Color.WHITE);
 		drawDebugScreenData(g);
-		drawGravitons(g);
+		//drawGravitons(g);
 		drawParticles(g);
 	}
 		private void drawDebugScreenData(Graphics g){

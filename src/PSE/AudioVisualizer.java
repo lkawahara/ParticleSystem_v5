@@ -33,7 +33,7 @@ public class AudioVisualizer {
 		//divides availableScreenSpace into even sections all of the same index sized width
 		int sectionWidth = availableScreenSpace / NUM_EMITTERS;
 		int sectionMidpoint = sectionWidth / 2;
-		float yPos = HEIGHT - PADDING;
+		float yPos = 0;//HEIGHT - PADDING;
 		
 		float xPos = PADDING + sectionMidpoint;
 		for(int i = 0; i < emitters.length; i ++, xPos += sectionWidth){
@@ -83,5 +83,4 @@ public class AudioVisualizer {
 		}
 		return ret;	}
 
-	
 }

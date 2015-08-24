@@ -9,7 +9,7 @@ import javax.swing.*;
 public class ParticleSystem_v5 extends Canvas {
 
 	public static final int WIDTH = 1920;
-	public static final int HEIGHT = 1200;
+	public static final int HEIGHT = 1080;
 	public static final int TICK = 33;
 
 	public static void main(String[] args) {

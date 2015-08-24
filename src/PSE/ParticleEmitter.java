@@ -10,7 +10,7 @@ import models.Particle;
 //simulate a frequency band with a particle emitter
 public class ParticleEmitter {
 	
-	private static int NUM_EMIT_PARTICLES = 2;
+	private static int NUM_EMIT_PARTICLES = 12;
 	private static int AGE_THRESHOLD = 100;
 	
 	private static Random rand = new Random();
@@ -37,8 +37,13 @@ public class ParticleEmitter {
 		//clear old
 		killOldParticles();
 	}
+	
+	int maxY = 100;
 	private void updateGraviton(){
-		this.force.setyPos(this.force.getyPos() - 1);
+		int randomInt = -5 + rand.nextInt(10); //-5 to 5
+		float newPos = this.force.getyPos() - randomInt;
+		newPos = (newPos < 5) ? 5 : ((newPos > maxY) ? maxY : newPos);//clamp
+		this.force.setyPos(newPos);
 	}
 	private void updateParticles(){
 		for(Particle p : particleAL){
@@ -60,13 +65,16 @@ public class ParticleEmitter {
 			}
 		}
 	}
-
+	
+	List<Particle> toRemove = new ArrayList<Particle>();
 	private void killOldParticles(){
+		toRemove.clear();
 		for(Particle p : particleAL){
 			if(p.getAge() > AGE_THRESHOLD){
-				particleAL.remove(p);
+				toRemove.add(p);
 			}
 		}
+		particleAL.removeAll(toRemove);
 	}
 	
 	public int getNumParticles() {
